@@ -1,0 +1,18 @@
+{
+    "name": "banco_solar",
+    "version": "1.0.0",
+    "description": "evaluacion modulo 7",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start": "nodemon server.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Toffy Caluga",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.3",
+        "nodemon": "^2.0.15",
+        "pg": "^8.7.3"
+    }
+}
