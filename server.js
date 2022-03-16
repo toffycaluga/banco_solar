@@ -1,5 +1,6 @@
 import express from "express";
 import { editarUsuarios, eliminarUsuario, getTransferencias, insertarUsuario, leerUsuario, nuevaTransferencia } from "./utilities/db.js";
+import { verificaTransferencia } from "./utilities/tools.js";
 
 const app = express();
 
@@ -21,17 +22,25 @@ app.post('/usuario', (req, res) => {
     req.on('data', (data) => body += data)
     req.on('end', async() => {
         const data = JSON.parse(body)
-        await insertarUsuario(data.nombre, data.balance);
-        res.status(200).send('todo ok');
+        const estado = await insertarUsuario(data.nombre, data.balance);
+        if (estado == true) {
+            res.status(201).json({ todo: 'ok' });
+        } else {
+            res.status(400).json(estado)
+        }
+
     })
 })
 
 app.put('/usuario', async(req, res) => {
     const id = req.query.id;
     const data = req.body;
-    await editarUsuarios(id, data.name, data.balance);
-    res.status(200).send('todo ok');
-
+    const estado = await editarUsuarios(id, data.name, data.balance);
+    if (estado == true) {
+        res.status(202).json({ todo: 'ok' });
+    } else {
+        res.status(401).send(estado)
+    }
 })
 
 app.delete('/usuario', async(req, res) => {
@@ -45,8 +54,12 @@ app.post('/transferencia', async(req, res) => {
     req.on('data', data => body += data)
     req.on('end', async() => {
         const data = JSON.parse(body)
-        await nuevaTransferencia(data.emisor, data.receptor, data.monto)
-        res.status(200).json({ todo: 'ok' });
+        const estado = await nuevaTransferencia(data.emisor, data.receptor, data.monto);
+        if (estado == true) {
+            res.status(201).json({ todo: 'ok' });
+        } else {
+            res.status(400).json(estado)
+        }
     })
 })
 
